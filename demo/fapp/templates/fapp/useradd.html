@@ -1,0 +1,90 @@
+{% extends "fapp/base2.html" %}
+{% block customstyle %}
+{% load static %}
+  <link rel="stylesheet" href="{% static  'fapp/css/bootstrap.min.css' %}" type="text/css" />
+{% endblock%}
+
+{% block content %}
+
+
+   {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="row"> <div class="col-lg-6">
+ {% if messages %}
+      <div class="alert alert-success alert-dismissible" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
+        <ul class="messages">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      </div>
+      {% endif %}
+        <form action="" method="post" class="form-horizontal">
+   {% csrf_token %}
+
+  {% for form_field in form %}
+     <div class ="form-group">
+
+    <label class="control-label col-sm-4"> {{ form_field.label }}</label>
+<div class="col-sm-8" >
+    {{ form_field }}
+    {% if form_field.help_text %}
+          <small style="color: grey">{{ form_field.help_text | safe }}</small>
+        {% endif %}
+    </div>
+</div>
+  {% endfor %}
+
+   <div class ="form-group">  <div class="col-sm-offset-4 col-sm-8">
+      <button type="submit" class="btn btn-primary "> <i class="fa fa-plus"> </i> Add User</button>
+    </div>  </div>
+
+
+
+        </form>    </div></div>
+
+
+{% endblock %}
+
+
+
+
+{% block customscript %}
+  <script type="text/javascript" src="{% static 'fapp/js/jquery-3.4.1.min.js' %}"></script>
+
+
+<script>
+   /*Menu-toggle*/
+      $("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          $("#wrapper").toggleClass("active");
+
+      });
+
+      $(function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      minDate : new Date(),
+
+      // You can put more options here.
+
+    });
+  });
+</script>
+{% endblock %}

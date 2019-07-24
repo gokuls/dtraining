@@ -21,6 +21,10 @@ from fapp import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/',views.index,name='index'),
-    path('',views.ulogin,name='ulogin')
+    path('',views.ulogin,name='ulogin'),
+    path('useradd',views.userCreation,name='users'),
+    path('userdetails',views.userdetails,name='usersd'),
+    path('userdetail',views.returnUserDetail,name='usersdetail')
+
 
 ]

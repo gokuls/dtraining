@@ -1,0 +1,115 @@
+{% extends "fapp/base2.html" %}
+{% block customstyle %}
+{% load static %}
+  <link rel="stylesheet" href="{% static  'fapp/css/bootstrap.min.css' %}" type="text/css" />
+{% endblock%}
+
+{% block content %}
+
+
+   {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> {{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+<div class="row"> <div class="col-lg-6">
+ {% if messages %}
+      <div class="alert alert-success alert-dismissible" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
+        <ul class="messages">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      </div>
+      {% endif %}
+
+      <select  class="form-control" id="usergroup">
+          <option name=''> Select User </option>
+          {%for user in users %}
+            <option  name='{{user}}'> {{user}} </option>
+          {% endfor %}
+        </select>
+        <div id="details" >
+</div>
+
+{% endblock %}
+
+
+
+
+{% block customscript %}
+  <script type="text/javascript" src="{% static 'fapp/js/jquery-3.4.1.min.js' %}"></script>
+
+  <script type="text/javascript">
+
+ $(document).ready(function() {
+
+
+
+  function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+$('#usergroup').on('change', function() {
+
+          var usern = this.value ;
+          $("#userlist").empty();
+
+          $.ajax({
+            type:"GET",
+            url:"userdetail",
+            //dataType:"json",
+            data:{
+              "username":usern
+              },
+            success: function(result){
+                      console.log("Response");
+                      console.log(result);
+                      $('#details').html(result);
+
+                  }
+
+            });
+});
+
+});
+
+</script>
+{% endblock %}
