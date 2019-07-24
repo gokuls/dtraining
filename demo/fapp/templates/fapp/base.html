@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- Tell the browser to be responsive to screen width -->
+      <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <title> MDM {% block title %} {{ title }} {% endblock %}</title>
+  {% block cssscripts %}
+
+      {% load static %}
+      <link rel="shortcut icon" type="image/png" href="{% static '/fapp/images/favicon.ico' %}"/>
+      {% include 'snippets/css.html' %}
+
+        {% endblock%}
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="{% static '/devicemanagement/js/new/ie8-responsive-file-warning.js' %}"></script><![endif]-->
+
+      {% block customstyle %}
+
+      {% endblock%}
+      <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="{% static '/devicemanagement/js/new/html5shiv.min.js' %}"></script>
+      <script src="{% static '/devicemanagement/js/new/respond.min.js' %}"></script>
+    <![endif]-->
+
+   </head>
+   <body>
+      {% block mainmenu %}
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+                 </div>
+        <div id="navbar" class="navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-right">
+            <li><a href="/mdm/homepage"> <i class="fas fa-tachometer-alt" aria-hidden="true"></i> Dashboard</a></li>
+
+          </ul>
+{% if request.user.is_authenticated %}
+
+
+        <ul class="nav navbar-nav navbar-right ">
+            <li><a href="#"> <i class="fa fa-user"></i> <strong> <abbr title="User Logged in">{{ request.user }} </abbr> </strong> </a></li>
+
+            <li><a href="{% url 'password_change' %}"> <i class="fas fa-key" aria-hidden="true"></i>
+ <abbr title="To change user password"> Change Password </abbr></a></li>
+
+            <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt" aria-hidden="true"> </i> Logout</a></li>
+
+          </ul>
+      {% endif %}
+
+        </div>
+      </div>
+    </nav>
+
+
+
+
+   <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+
+
+
+
+
+    {% include "snippets/nav.html" %}
+    <!-- Page content -->
+   </div>
+
+  {% if request.user.is_authenticated %}
+{% endif %}
+
+ {% endblock %}
+{% block skipdiv %}
+
+{% block pageheader %}
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
+      {% if title %}
+
+          {% if title == "Password change successful" %}
+            <h1 class="page-header">Password change</h1>
+          {% else %}
+          <h1 class="page-header">{{ title }}</h1>
+          {% endif %}
+
+      {% else %}
+           <h1 class="page-header" > Dashboard </h1>
+      {% endif %}
+{% endblock %}
+
+      {% if messages %}
+      <div class="alert alert-success alert-dismissible" id="success-alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"> &times;</a>
+        <ul class="messages">
+          {% for message in messages %}
+          <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+      </div>
+      {% endif %}
+
+      {% block content %}
+      {% endblock %}
+
+    </div>
+
+
+{% endblock %}
+
+
+ </div>
+
+</div>
+
+
+
+
+
+ {%block scripts %}
+            {%  include 'snippets/js.html' %}
+            <script type="text/javascript">
+             $(document).ready(function() {
+                         /*$("#success-alert").fadeTo(1000, 500).slideUp(500, function(){
+                                 $("#success-alert").alert('close');
+                       });*/
+                       });
+            </script>
+{% endblock %}
+
+{% block customscript %}
+{% endblock %}
+   </body>
+</html>
